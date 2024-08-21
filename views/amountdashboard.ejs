@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Amount Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e5e7eb;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-left-color: #2563eb;
+        }
+
+        .header {
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .insight-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .insight-description {
+            font-size: 1rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .text-blue-600 {
+            color: #2563eb;
+        }
+
+        .text-green-600 {
+            color: #10b981;
+        }
+
+        .text-purple-600 {
+            color: #8b5cf6;
+        }
+
+        .text-red-600 {
+            color: #ef4444;
+        }
+
+        .text-yellow-600 {
+            color: #f59e0b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-8">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Transaction Amount Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="card p-8">
+                <h2 class="header mb-2">Total Transactions</h2>
+                <p class="insight-value text-blue-600"><%= totalTransactionCount %></p>
+                <p class="insight-description">All recorded transactions in the database.</p>
+            </div>
+
+            <div class="card p-8">
+                <h2 class="header mb-2">Total Amount</h2>
+                <p class="insight-value text-green-600">$<%= totalAmount %></p>
+                <p class="insight-description">Sum of all transaction amounts.</p>
+            </div>
+
+            <div class="card p-8">
+                <h2 class="header mb-2">Average Transaction Amount</h2>
+                <p class="insight-value text-purple-600">$<%= averageAmount %></p>
+                <p class="insight-description">The average value of transactions.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="card p-8">
+                <h2 class="header mb-2">Maximum Transaction Amount</h2>
+                <p class="insight-value text-red-600">$<%= maxAmount %></p>
+                <p class="insight-description">Highest transaction recorded.</p>
+            </div>
+
+            <div class="card p-8">
+                <h2 class="header mb-2">Minimum Transaction Amount</h2>
+                <p class="insight-value text-yellow-600">$<%= minAmount %></p>
+                <p class="insight-description">Lowest transaction recorded.</p>
+            </div>
+        </div>
+
+        <div class="card p-8 mt-12">
+            <h2 class="header mb-4">Amount Distribution (Static Data)</h2>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="amountChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Static data for amount distribution chart
+        const ctxAmount = document.getElementById('amountChart').getContext('2d');
+        new Chart(ctxAmount, {
+            type: 'bar',
+            data: {
+                labels: ['$0-100', '$101-500', '$501-1000', '$1001-5000', '$5001+'],
+                datasets: [{
+                    label: 'Number of Transactions',
+                    data: [50, 100, 75, 30, 10], // Replace with real data if available
+                    backgroundColor: '#3b82f6',
+                    borderColor: '#2563eb',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

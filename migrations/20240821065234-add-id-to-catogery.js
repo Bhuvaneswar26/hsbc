@@ -11,14 +11,14 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
 
-    //adding id to category table
-
-    await queryInterface.addColumn('Categories', 'id', {
+    //adding id to user table
+    await queryInterface.addColumn('Users', 'id', {
       type: Sequelize.INTEGER,
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     });
+
+   
 
   },
 
@@ -29,7 +29,9 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.removeColumn('Categories', 'id');
     
+    //removing id from user table
+    await queryInterface.removeColumn('Users', 'id');
+
   }
 };

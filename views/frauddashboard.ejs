@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/ba6d17dfa2.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Fraud Dashboard</title>
+</head>
+<body class="bg-blue-200 h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-500 w-full py-4">
+    <div class="max-w-screen-xl mx-auto px-4 flex justify-between items-center">
+      <a href="#" class="text-white text-lg font-bold">
+        <i class="fas fa-tachometer-alt text-2xl mr-2"></i>Fraud Dashboard
+      </a>
+      <ul class="flex space-x-6 text-white">
+        <li><a href="#" class="hover:underline">Home</a></li>
+        <li><a href="#" class="hover:underline">Frauds</a></li>
+        <li><a href="#" class="hover:underline">Reports</a></li>
+      </ul>
+      <div class="flex items-center space-x-4">
+        <span class="text-white">Welcome, User</span>
+        <a href="#" class="text-white hover:underline">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Dashboard -->
+  <main class="flex-grow flex flex-col items-center justify-center w-full max-w-screen-xl mx-auto py-10">
+    <div class="bg-white p-10 rounded shadow-md w-full">
+      <div class="flex items-center justify-center mb-6">
+        <i class="fas fa-chart-line text-4xl text-blue-500 mr-2"></i>
+        <h2 class="text-2xl font-semibold text-blue-500">Fraud Data Visualization</h2>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Number of Frauds by Gender Chart -->
+        <div class="bg-blue-100 p-6 rounded-md shadow-md">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">Number of Frauds by Gender</h3>
+          <canvas id="fraudsByGenderChart"></canvas>
+        </div>
+
+        <!-- Number of Frauds vs Amount Chart -->
+        <div class="bg-blue-100 p-6 rounded-md shadow-md">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">Number of Frauds vs Amount</h3>
+          <canvas id="fraudsVsAmountChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Additional Data Display -->
+      <div class="mt-10">
+        <p class="text-lg font-semibold text-gray-700">Fraud Count: <span class="text-blue-500"><%= fraudCount %></span></p>
+        <p class="text-lg font-semibold text-gray-700">Total Transactions: <span class="text-blue-500"><%= totalTransactionCount %></span></p>
+        <p class="text-lg font-semibold text-gray-700">Total Amount: <span class="text-blue-500">$<%= totalAmount.toFixed(2) %></span></p>
+        <p class="text-lg font-semibold text-gray-700">Fraud Amount: <span class="text-blue-500">$<%= fraudAmount.toFixed(2) %></span></p>
+        <p class="text-lg font-semibold text-gray-700">Fraud Percentage: <span class="text-blue-500"><%= fraudPercentage.toFixed(2) %> %</span></p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-blue-500 w-full py-4">
+    <div class="max-w-screen-xl mx-auto px-4 text-center text-white">
+      <p>&copy; 2024 Fraud Dashboard. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Fetch and Display Charts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Example static data for Number of Frauds by Gender Chart
+      const fraudsByGenderData = {
+        labels: ['Male', 'Female'],
+        datasets: [{
+          label: 'Number of Frauds',
+          data: [300, 450], // Replace with dynamic data if available
+          backgroundColor: ['#1D4ED8', '#3B82F6'],
+          borderColor: ['#1E40AF', '#2563EB'],
+          borderWidth: 1,
+        }]
+      };
+
+      // Example static data for Number of Frauds vs Amount Chart
+      const fraudsVsAmountData = {
+        labels: ['Age 18-25', 'Age 26-35', 'Age 36-45', 'Age 46-55', 'Age 56+'],
+        datasets: [{
+          label: 'Number of Frauds',
+          data: [50, 80, 60, 40, 20], // Replace with dynamic data if available
+          backgroundColor: '#1D4ED8',
+          borderColor: '#1E40AF',
+          borderWidth: 1,
+          fill: false,
+        }, {
+          label: 'Amount',
+          data: [2000, 3000, 2500, 1500, 800], // Replace with dynamic data if available
+          backgroundColor: '#10B981',
+          borderColor: '#059669',
+          borderWidth: 1,
+          fill: false,
+        }]
+      };
+
+      // Initialize charts with dynamic and static data
+      const fraudsByGenderCtx = document.getElementById('fraudsByGenderChart').getContext('2d');
+      new Chart(fraudsByGenderCtx, {
+        type: 'bar',
+        data: fraudsByGenderData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return value;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      const fraudsVsAmountCtx = document.getElementById('fraudsVsAmountChart').getContext('2d');
+      new Chart(fraudsVsAmountCtx, {
+        type: 'line',
+        data: fraudsVsAmountData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return value;
+                }
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

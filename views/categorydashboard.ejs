@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e5e7eb;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-left-color: #2563eb;
+        }
+
+        .header {
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .insight-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .insight-description {
+            font-size: 1rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-title {
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-8">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Category-Based Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="card p-8">
+                <h2 class="header mb-2">Fraud Count by Category</h2>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="fraudCountChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card p-8">
+                <h2 class="header mb-2">Transaction Count by Category</h2>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="transactionCountChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card p-8">
+                <h2 class="header mb-2">Total Amount by Category</h2>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="amountChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fraudCountData = {
+            labels: <%= JSON.stringify(Object.keys(catFraudCount)) %>,
+            datasets: [{
+                label: 'Fraud Count',
+                data: <%= JSON.stringify(Object.values(catFraudCount)) %>,
+                backgroundColor: '#ef4444',
+                borderColor: '#b91c1c',
+                borderWidth: 2
+            }]
+        };
+
+        const transactionCountData = {
+            labels: <%= JSON.stringify(Object.keys(catTransactionCount)) %>,
+            datasets: [{
+                label: 'Transaction Count',
+                data: <%= JSON.stringify(Object.values(catTransactionCount)) %>,
+                backgroundColor: '#3b82f6',
+                borderColor: '#2563eb',
+                borderWidth: 2
+            }]
+        };
+
+        const amountData = {
+            labels: <%= JSON.stringify(Object.keys(catAmount)) %>,
+            datasets: [{
+                label: 'Total Amount ($)',
+                data: <%= JSON.stringify(Object.values(catAmount)) %>,
+                backgroundColor: '#10b981',
+                borderColor: '#059669',
+                borderWidth: 2
+            }]
+        };
+
+        const ctxFraudCount = document.getElementById('fraudCountChart').getContext('2d');
+        new Chart(ctxFraudCount, {
+            type: 'bar',
+            data: fraudCountData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const ctxTransactionCount = document.getElementById('transactionCountChart').getContext('2d');
+        new Chart(ctxTransactionCount, {
+            type: 'bar',
+            data: transactionCountData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const ctxAmount = document.getElementById('amountChart').getContext('2d');
+        new Chart(ctxAmount, {
+            type: 'bar',
+            data: amountData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

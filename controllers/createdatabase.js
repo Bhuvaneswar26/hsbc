@@ -20,15 +20,17 @@ fs.createReadStream(filePath)
           customerId: data.customer,
           gender: data.gender,
           age: data.age,
-          zipCode: data.zipcode,
+          zipCode: data.zipcodeOri,
         });
       }
 
       // Check if the category already exists
-      let category = await Category.findOne({ where: { categoryName: data.category } });
+    let category = await Category.findOne({ where: { category: data.category } });
+    
+
       if (!category) {
         category = await Category.create({
-          categoryName: data.category,
+          category: data.category,          
         });
       }
 
@@ -37,7 +39,8 @@ fs.createReadStream(filePath)
         customerId: user.customerId,      // Corrected to reference user's ID
         merchantID: data.merchant,
         categoryId: category.id,  // Corrected to reference category's ID
-        amount: data.amount,
+        //rounding off the amount to nearest integer
+        amount: Math.round(data.amount),
         fraud: data.fraud,
       });
 
